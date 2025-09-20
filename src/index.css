@@ -1,0 +1,276 @@
+/* biome-ignore-all lint/correctness/noUnknownProperty: Tailwind introduces custom directives like `@theme inline` and `@custom-variant` that Biome does not recognize as standard CSS properties. These are valid in Tailwind's PostCSS pipeline, so we disable this rule for this file.*/
+/* biome-ignore-all lint/suspicious/noUnknownAtRules: Tailwind-specific at-rules (`@plugin`, `@theme`, `@custom-variant`) are not standard CSS and Biome flags them. They are required for Tailwind configuration, so we suppress this rule for this file.*/
+
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms" {
+  strategy: "base";
+  strategy: "class";
+}
+
+@custom-variant dark (&:is(.dark *));
+
+body {
+  font-family: 'Inter Variable', sans-serif;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+
+  -webkit-text-fill-color: var(--foreground) !important;
+
+  background-image: none !important;
+
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+
+@theme inline {
+  /* === Color Scales === */
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
+  --color-primary: var(--primary-500);
+
+  --color-mineshaft-50: var(--mineshaft-50);
+  --color-mineshaft-100: var(--mineshaft-100);
+  --color-mineshaft-200: var(--mineshaft-200);
+  --color-mineshaft-300: var(--mineshaft-300);
+  --color-mineshaft-400: var(--mineshaft-400);
+  --color-mineshaft-500: var(--mineshaft-500);
+  --color-mineshaft-600: var(--mineshaft-600);
+  --color-mineshaft-700: var(--mineshaft-700);
+  --color-mineshaft-800: var(--mineshaft-800);
+  --color-mineshaft-900: var(--mineshaft-900);
+  --color-mineshaft: var(--mineshaft-500);
+
+  --color-bunker-50: var(--bunker-50);
+  --color-bunker-100: var(--bunker-100);
+  --color-bunker-200: var(--bunker-200);
+  --color-bunker-300: var(--bunker-300);
+  --color-bunker-400: var(--bunker-400);
+  --color-bunker-500: var(--bunker-500);
+  --color-bunker-600: var(--bunker-600);
+  --color-bunker-700: var(--bunker-700);
+  --color-bunker-800: var(--bunker-800);
+  --color-bunker-900: var(--bunker-900);
+  --color-bunker-950: var(--bunker-950);
+  --color-bunker: var(--bunker-500);
+
+  --color-chicago-50: var(--chicago-50);
+  --color-chicago-100: var(--chicago-100);
+  --color-chicago-200: var(--chicago-200);
+  --color-chicago-300: var(--chicago-300);
+  --color-chicago-400: var(--chicago-400);
+  --color-chicago-500: var(--chicago-500);
+  --color-chicago-600: var(--chicago-600);
+  --color-chicago-700: var(--chicago-700);
+  --color-chicago-800: var(--chicago-800);
+  --color-chicago-900: var(--chicago-900);
+  --color-chicago-950: var(--chicago-950);
+  --color-chicago: var(--chicago-500);
+
+  /* === UI Tokens === */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: #ff4d4f;
+  --color-destructive-foreground: #ffffff;
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--primary);
+
+  --color-puck:var(--puck-background)
+}
+
+:root {
+  color-scheme: light;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* === Primary Colors === */
+  --primary-50: #f6edfa;
+  --primary-100: #eddff5;
+  --primary-200: #d1b0e8;
+  --primary-300: #b286d9;
+  --primary-400: #753fba;
+  --primary-500: #39089d;
+  --primary-600: #32078f;
+  --primary-700: #260575;
+  --primary-800: #1b035e;
+  --primary-900: #130147;
+  --primary-950: #0a002e;
+
+  /* === Mineshaft === */
+  --mineshaft-50: #f5f5f5;
+  --mineshaft-100: #ebebeb;
+  --mineshaft-200: #ccccce;
+  --mineshaft-300: #adaeb0;
+  --mineshaft-400: #707174;
+  --mineshaft-500: #323439;
+  --mineshaft-600: #2d2f33;
+  --mineshaft-700: #26272b;
+  --mineshaft-800: #1e1f22;
+  --mineshaft-900: #19191c;
+  --mineshaft: #323439;
+
+  /* === Chicago === */
+  --chicago-50: #f7f7f7;
+  --chicago-100: #efefef;
+  --chicago-200: #d6d6d7;
+  --chicago-300: #bdbebf;
+  --chicago-400: #8c8d8e;
+  --chicago-500: #5b5c5e;
+  --chicago-600: #525355;
+  --chicago-700: #444547;
+  --chicago-800: #373738;
+  --chicago-900: #2d2d2e;
+  --chicago: #5b5c5e;
+
+  /* === Bunker === */
+  --bunker-50: #f3f4f4;
+  --bunker-100: #e8e8e9;
+  --bunker-200: #c5c6c8;
+  --bunker-300: #a2a4a6;
+  --bunker-400: #5d5f64;
+  --bunker-500: #171b21;
+  --bunker-600: #15181e;
+  --bunker-700: #111419;
+  --bunker-800: #0e1014;
+  --bunker-900: #0b0d10;
+  --bunker: #171b21;
+
+--background: #fcfcfc;
+  --foreground: #171717;
+  --card: #fcfcfc;
+  --card-foreground: #171717;
+  --popover: #fcfcfc;
+  --popover-foreground: #525252;
+  --primary: #39089d;
+  --primary-foreground: #ffffff;
+  --secondary: #fdfdfd;
+  --secondary-foreground: #171717;
+  --muted: #ededed;
+  --muted-foreground: #202020;
+  --accent: #ededed;
+  --accent-foreground: #202020;
+  --destructive: #ca3214;
+  --destructive-foreground: #fffcfc;
+  --border: #dfdfdf;
+  --input: #f6f6f6;
+  --ring: #39089d;
+
+  --puck-background:#ffffff;
+  
+}
+
+
+.dark {
+  color-scheme: dark;
+
+
+  /* === Primary Dark Mode === */
+  --primary-50: #fefff2;
+  --primary-100: #fcffe6;
+  --primary-200: #f4fcc0;
+  --primary-300: #effc9a;
+  --primary-400: #ddfa4d;
+  --primary-500: #c6f806;
+  --primary-600: #abde04;
+  --primary-700: #83ba02;
+  --primary-800: #5e9401;
+  --primary-900: #427001;
+  --primary-950: #254701;
+
+  /* === Mineshaft === */
+  --mineshaft-50: #f5f5f5;
+  --mineshaft-100: #ebebeb;
+  --mineshaft-200: #ccccce;
+  --mineshaft-300: #adaeb0;
+  --mineshaft-400: #707174;
+  --mineshaft-500: #323439;
+  --mineshaft-600: #2d2f33;
+  --mineshaft-700: #26272b;
+  --mineshaft-800: #1e1f22;
+  --mineshaft-900: #19191c;
+  --mineshaft: #323439;
+
+  /* === Chicago === */
+  --chicago-50: #f7f7f7;
+  --chicago-100: #efefef;
+  --chicago-200: #d6d6d7;
+  --chicago-300: #bdbebf;
+  --chicago-400: #8c8d8e;
+  --chicago-500: #5b5c5e;
+  --chicago-600: #525355;
+  --chicago-700: #444547;
+  --chicago-800: #373738;
+  --chicago-900: #2d2d2e;
+  --chicago: #5b5c5e;
+
+  /* === Bunker === */
+  --bunker-50: #f3f4f4;
+  --bunker-100: #e8e8e9;
+  --bunker-200: #c5c6c8;
+  --bunker-300: #a2a4a6;
+  --bunker-400: #5d5f64;
+  --bunker-500: #171b21;
+  --bunker-600: #15181e;
+  --bunker-700: #111419;
+  --bunker-800: #0e1014;
+  --bunker-900: #0b0d10;
+  --bunker: #171b21;
+
+ --background: #121212;
+  --foreground: #e2e8f0;
+  --card: #171717;
+  --card-foreground: #e2e8f0;
+  --popover: #242424;
+  --popover-foreground: #a9a9a9;
+  --primary: #c6f806;
+  --primary-foreground: #000000;
+  --secondary: #242424;
+  --secondary-foreground: #fafafa;
+  --muted: #1f1f1f;
+  --muted-foreground: #a2a2a2;
+  --accent: #313131;
+  --accent-foreground: #fafafa;
+  --destructive: #541c15;
+  --destructive-foreground: #ede9e8;
+  --border: #292929;
+  --input: #242424;
+  --ring: #c6f806;
+
+  --puck-background:#26272b;
+}
+
+._DropZone_1i2sv_1:empty{
+  background-color: var(--color-puck) !important;
+  outline:1px solid var(--color-blue-600) !important;
+  outline-style: dashed !important;
+}
+
+
+
+ 
