@@ -3,6 +3,8 @@ import LandingPage from "./landing";
 import { TeddyBoyTemplateRoot } from "../root";
 import HeroCarousel from "./_components/HeroCarousel";
 import FeaturedCategories from "./_components/CategoriesSection";
+import { BannerComponent } from "./_components/banner";
+import ProductListing from "./_components/product-listing";
 
 export const TeddyBoyLandingPageTemplate:TemplatePage = {
     config: {
@@ -28,6 +30,28 @@ export const TeddyBoyLandingPageTemplate:TemplatePage = {
                 },
                 render:({title})=>{
                     return <FeaturedCategories />
+                }
+            },
+            BannerSection:{
+                fields:{
+                    title:{type:"text",contentEditable:true}
+                },
+                defaultProps:{
+                    title:"Hello world"
+                },
+                render:({title})=>{
+                    return <BannerComponent />
+                }
+            },
+            ProductListing:{
+                fields:{
+                    title:{type:"text",contentEditable:true}
+                },
+                defaultProps:{
+                    title:"Hello world"
+                },
+                render:({title})=>{
+                    return <ProductListing />
                 }
             }
         },

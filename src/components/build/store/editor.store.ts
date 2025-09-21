@@ -255,6 +255,8 @@ export const useEditorStore = create<EditorStore>()(
                     templateName: currentTemplate.name,
                     ...(font && { font })
                 };
+
+                console.log(publishData)
                 
                 set((state) => {
                     state.error = null;
