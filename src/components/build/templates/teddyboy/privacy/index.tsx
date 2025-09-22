@@ -15,6 +15,20 @@ export const TeddyBoyPrivacyPageTemplate:TemplatePage = {
             }
         }
     },
+    pageState:{
+    "root": {
+        "props": {}
+    },
+    "content": [
+        {
+            "type": "PrivacyPage",
+            "props": {
+                "id": "PrivacyPage-283d24fc-00ee-4433-8159-775c4da2f9ea"
+            }
+        }
+    ],
+    "zones": {}
+},
     pagename:"Privacy Page",
     pageId:"ab78ad6b-1c0a-4e1a-aa7e-8315c7bd2d87"
 }

@@ -10,7 +10,7 @@ import { EmptyPageState, NoPageSelected } from "./empty-states";
 import CompositeEditor from "../layout/composite-editor";
 import "@measured/puck/puck.css";
 import { useSearch } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { CapconsWebsiteTemplates } from "../templates";
 import { CapconsEditorOverrides } from "..";
 import { useTheme } from "next-themes";
@@ -39,9 +39,12 @@ export default function WebsiteTemplateEditor() {
   const CurrentData = currentPageId
     ? currentPageState[currentPageId]
     : InitialWebsiteDataState;
-  const CurrentConfig = currentPage ? currentPage.config : undefined;
 
-  const handlePageState = (data: Data) => setPageState(currentPageId, data);
+  const CurrentConfig = currentPage ? currentPage.config : undefined;
+ 
+  const handlePageState = useCallback((data: Data) => {
+    setPageState(currentPageId, data);
+  }, [currentPageId, setPageState]);
 
   if (!currentPageId || !CurrentConfig) {
     return <NoPageSelected />;
@@ -52,7 +55,7 @@ export default function WebsiteTemplateEditor() {
   }
   return (
     <Puck
-      key={theme.theme}
+      key={`${theme.theme}-${currentPageId}`}
       config={CurrentConfig}
       data={CurrentData}
       overrides={CapconsEditorOverrides}

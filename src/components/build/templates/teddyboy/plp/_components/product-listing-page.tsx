@@ -1,15 +1,22 @@
 import FiltersComponentStatic from "./fileters-static";
 import ProductListingSectionStatic from "./product-listing-section";
 
-export default function ProductListingPage() {
+export type ProductListingPageProps = {
+  title: string;
+  description: string;
+};
+
+export default function ProductListingPage({
+  title,
+  description,
+}: ProductListingPageProps) {
   return (
     <div className="bg-white">
       <FiltersComponentStatic
-        title="Our Collection"
-        description="Fresh, versatile fashion that moves with you—wherever life takes you."
+        title={title}
+        description={description}
       />
-
-     <ProductListingSectionStatic />
+      <ProductListingSectionStatic />
     </div>
-  )
+  );
 }
