@@ -24,6 +24,7 @@ interface EditorStoreState {
 	loading: boolean;
 	error: string | null;
 	viewport: Viewport;
+	previewDialogOpen: boolean;
 }
 
 interface EditorStoreActions {
@@ -38,6 +39,7 @@ interface EditorStoreActions {
 	setLoading: (loading: boolean) => void;
 	setError: (error: string | null) => void;
 	setViewport: (viewport: Viewport) => void;
+	setPreviewDialogOpen: (open: boolean) => void;
 
 	getCurrentTemplate: () => EditorTemplate | null;
 	getCurrentPage: () => TemplatePage | null;
@@ -66,6 +68,7 @@ const initialState: EditorStoreState = {
 	loading: false,
 	error: null,
 	viewport: EDITOR_VIEWPORTS[0],
+	previewDialogOpen: false,
 };
 
 export const useEditorStore = create<EditorStore>()(
@@ -173,6 +176,11 @@ export const useEditorStore = create<EditorStore>()(
 			});
 		},
 
+		setPreviewDialogOpen: (open: boolean) => {
+			set((state) => {
+				state.previewDialogOpen = open;
+			});
+		},
 		getCurrentTemplate: () => get().currentTemplate,
 
 		getCurrentPage: () => get().currentPage,
@@ -315,5 +323,7 @@ export const useCurrentPageState = () => {
 export const useLoading = () => useEditorStore((state) => state.loading);
 export const useError = () => useEditorStore((state) => state.error);
 export const useViewport = () => useEditorStore((state) => state.viewport);
+export const usePreviewDialogOpen = () =>
+  useEditorStore((state) => state.previewDialogOpen);
 
 export type { PublishTemplateData };
