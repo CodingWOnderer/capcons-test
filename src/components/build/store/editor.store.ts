@@ -4,327 +4,339 @@ import type { Data, Viewport } from "@measured/puck";
 import { immer } from "zustand/middleware/immer";
 import { EDITOR_VIEWPORTS } from "../utils/viewports";
 import { useUpdateCircleTemplate } from "@/hooks/api/templates/queries";
- 
 
 interface PublishTemplateData {
-	templatePages: {
-		pageId: string;
-		pageName: string;
-		websitePageState: string;
-		path:string;
-        preview:string;
-        description:string;
-	}[];
-	templateId: string;
-	templateName: string;
-	font?: string;
+  templatePages: {
+    pageId: string;
+    pageName: string;
+    websitePageState: string;
+    path: string;
+    preview: string;
+    description: string;
+  }[];
+  templateId: string;
+  templateName: string;
+  font?: string;
 }
 
 interface EditorStoreState {
-	currentTemplate: EditorTemplate | null;
-	currentPage: TemplatePage | null;
-	websitePagesState: Record<string, Data>;
-	currentPageId: string;
-	currentTemplateId: string;
-	loading: boolean;
-	error: string | null;
-	viewport: Viewport;
-	previewDialogOpen: boolean;
+  currentTemplate: EditorTemplate | null;
+  currentPage: TemplatePage | null;
+  websitePagesState: Record<string, Data>;
+  currentPageId: string;
+  currentTemplateId: string;
+  loading: boolean;
+  error: string | null;
+  viewport: Viewport;
+  previewDialogOpen: boolean;
+  font: string;
 }
 
 interface EditorStoreActions {
-	initializeFromTemplate: (template: EditorTemplate) => void;
+  initializeFromTemplate: (template: EditorTemplate) => void;
 
-	setCurrentTemplate: (template: EditorTemplate) => void;
-	setCurrentPage: (page: TemplatePage) => void;
-	setCurrentPageId: (pageId: string) => void;
-	setCurrentTemplateId: (templateId: string) => void;
-	setWebsitePagesState: (pagesState: Record<string, Data>) => void;
-	setPageState: (pageId: string, data: Data) => void;
-	setLoading: (loading: boolean) => void;
-	setError: (error: string | null) => void;
-	setViewport: (viewport: Viewport) => void;
-	setPreviewDialogOpen: (open: boolean) => void;
+  setCurrentTemplate: (template: EditorTemplate) => void;
+  setCurrentPage: (page: TemplatePage) => void;
+  setCurrentPageId: (pageId: string) => void;
+  setCurrentTemplateId: (templateId: string) => void;
+  setWebsitePagesState: (pagesState: Record<string, Data>) => void;
+  setPageState: (pageId: string, data: Data) => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
+  setViewport: (viewport: Viewport) => void;
+  setPreviewDialogOpen: (open: boolean) => void;
+  setFont: (font: string) => void;
 
-	getCurrentTemplate: () => EditorTemplate | null;
-	getCurrentPage: () => TemplatePage | null;
-	getCurrentPageId: () => string;
-	getCurrentTemplateId: () => string;
-	getWebsitePagesState: () => Record<string, Data>;
-	getPageState: (pageId: string) => Data | undefined;
-	getLoading: () => boolean;
-	getError: () => string | null;
-	getViewport: () => Viewport;
+  getFont: () => string;
+  getCurrentTemplate: () => EditorTemplate | null;
+  getCurrentPage: () => TemplatePage | null;
+  getCurrentPageId: () => string;
+  getCurrentTemplateId: () => string;
+  getWebsitePagesState: () => Record<string, Data>;
+  getPageState: (pageId: string) => Data | undefined;
+  getLoading: () => boolean;
+  getError: () => string | null;
+  getViewport: () => Viewport;
 
-	switchPage: (pageId: string) => void;
-	clearError: () => void;
-	reset: () => void;
-	publishTemplate: (font?: string) => PublishTemplateData | null;
+  switchPage: (pageId: string) => void;
+  clearError: () => void;
+  reset: () => void;
+  publishTemplate: (font?: string) => PublishTemplateData | null;
 }
 
 type EditorStore = EditorStoreState & EditorStoreActions;
 
 const initialState: EditorStoreState = {
-	currentTemplate: null,
-	currentPage: null,
-	websitePagesState: {},
-	currentPageId: "",
-	currentTemplateId: "",
-	loading: false,
-	error: null,
-	viewport: EDITOR_VIEWPORTS[0],
-	previewDialogOpen: false,
+  currentTemplate: null,
+  currentPage: null,
+  websitePagesState: {},
+  currentPageId: "",
+  currentTemplateId: "",
+  loading: false,
+  error: null,
+  viewport: EDITOR_VIEWPORTS[0],
+  previewDialogOpen: false,
+  font: "Arial, sans-serif",
 };
 
 export const useEditorStore = create<EditorStore>()(
-	immer((set, get) => ({
-		...initialState,
+  immer((set, get) => ({
+    ...initialState,
 
-		initializeFromTemplate: (template: EditorTemplate) => {
-			set((state) => {
-				state.loading = true;
-				state.error = null;
-			});
+    initializeFromTemplate: (template: EditorTemplate) => {
+      set((state) => {
+        state.loading = true;
+        state.error = null;
+      });
 
-			try {
-				if (!template || !template.pages || template.pages.length === 0) {
-					throw new Error(
-						"Invalid template: Template must have at least one page",
-					);
-				}
+      try {
+        if (!template || !template.pages || template.pages.length === 0) {
+          throw new Error(
+            "Invalid template: Template must have at least one page"
+          );
+        }
 
-				const firstPage = template.pages[0];
+        const firstPage = template.pages[0];
 
-				const pagesState: Record<string, Data> = {};
-				template.pages.forEach((page) => {
-					pagesState[page.pageId] = page.pageState || {
-						root: { props: {} },
-						content: [],
-						zones: {},
-					};
-				});
+        const pagesState: Record<string, Data> = {};
+        template.pages.forEach((page) => {
+          pagesState[page.pageId] = page.pageState || {
+            root: { props: {} },
+            content: [],
+            zones: {},
+          };
+        });
 
-				set((state) => {
-					state.currentTemplate = template;
-					state.currentTemplateId = template.templateId;
-					state.currentPage = firstPage;
-					state.currentPageId = firstPage.pageId;
-					state.websitePagesState = pagesState;
-					state.loading = false;
-					state.error = null;
-				});
-			} catch (error) {
-				set((state) => {
-					state.loading = false;
-					state.error =
-						error instanceof Error
-							? error.message
-							: "Failed to initialize template";
-				});
-			}
-		},
+        set((state) => {
+          state.currentTemplate = template;
+          state.currentTemplateId = template.templateId;
+          state.currentPage = firstPage;
+          state.currentPageId = firstPage.pageId;
+          state.websitePagesState = pagesState;
+          state.loading = false;
+          state.error = null;
+        });
+      } catch (error) {
+        set((state) => {
+          state.loading = false;
+          state.error =
+            error instanceof Error
+              ? error.message
+              : "Failed to initialize template";
+        });
+      }
+    },
 
-		setCurrentTemplate: (template: EditorTemplate) => {
-			set((state) => {
-				state.currentTemplate = template;
-			});
-		},
+    setCurrentTemplate: (template: EditorTemplate) => {
+      set((state) => {
+        state.currentTemplate = template;
+      });
+    },
 
-		setCurrentPage: (page: TemplatePage) => {
-			set((state) => {
-				state.currentPage = page;
-			});
-		},
+    setCurrentPage: (page: TemplatePage) => {
+      set((state) => {
+        state.currentPage = page;
+      });
+    },
 
-		setCurrentPageId: (pageId: string) => {
-			set((state) => {
-				state.currentPageId = pageId;
-			});
-		},
+    setCurrentPageId: (pageId: string) => {
+      set((state) => {
+        state.currentPageId = pageId;
+      });
+    },
 
-		setCurrentTemplateId: (templateId: string) => {
-			set((state) => {
-				state.currentTemplateId = templateId;
-			});
-		},
+    setCurrentTemplateId: (templateId: string) => {
+      set((state) => {
+        state.currentTemplateId = templateId;
+      });
+    },
 
-		setWebsitePagesState: (pagesState: Record<string, Data>) => {
-			set((state) => {
-				state.websitePagesState = pagesState;
-			});
-		},
+    setWebsitePagesState: (pagesState: Record<string, Data>) => {
+      set((state) => {
+        state.websitePagesState = pagesState;
+      });
+    },
 
-		setPageState: (pageId: string, data: Data) => {
-			set((state) => {
-				state.websitePagesState[pageId] = {
-					...state.websitePagesState[pageId],
-					...data,
-				};
-			});
-		},
+    setPageState: (pageId: string, data: Data) => {
+      set((state) => {
+        state.websitePagesState[pageId] = {
+          ...state.websitePagesState[pageId],
+          ...data,
+        };
+      });
+    },
 
-		setLoading: (loading: boolean) => {
-			set((state) => {
-				state.loading = loading;
-			});
-		},
+    setLoading: (loading: boolean) => {
+      set((state) => {
+        state.loading = loading;
+      });
+    },
 
-		setError: (error: string | null) => {
-			set((state) => {
-				state.error = error;
-			});
-		},
+    setError: (error: string | null) => {
+      set((state) => {
+        state.error = error;
+      });
+    },
 
-		setViewport: (viewport: Viewport) => {
-			set((state) => {
-				state.viewport = viewport;
-			});
-		},
+    setViewport: (viewport: Viewport) => {
+      set((state) => {
+        state.viewport = viewport;
+      });
+    },
 
-		setPreviewDialogOpen: (open: boolean) => {
-			set((state) => {
-				state.previewDialogOpen = open;
-			});
-		},
-		getCurrentTemplate: () => get().currentTemplate,
+    setPreviewDialogOpen: (open: boolean) => {
+      set((state) => {
+        state.previewDialogOpen = open;
+      });
+    },
+	
+    setFont: (font: string) => {
+      set((state) => {
+        state.font = font;
+      });
+    },
 
-		getCurrentPage: () => get().currentPage,
+    getFont: () => get().font,
 
-		getCurrentPageId: () => get().currentPageId,
+    getCurrentTemplate: () => get().currentTemplate,
 
-		getCurrentTemplateId: () => get().currentTemplateId,
+    getCurrentPage: () => get().currentPage,
 
-		getWebsitePagesState: () => get().websitePagesState,
+    getCurrentPageId: () => get().currentPageId,
 
-		getPageState: (pageId: string) => get().websitePagesState[pageId],
+    getCurrentTemplateId: () => get().currentTemplateId,
 
-		getLoading: () => get().loading,
+    getWebsitePagesState: () => get().websitePagesState,
 
-		getError: () => get().error,
+    getPageState: (pageId: string) => get().websitePagesState[pageId],
 
-		getViewport: () => get().viewport,
+    getLoading: () => get().loading,
 
-		switchPage: (pageId: string) => {
-			set((state) => {
-				state.loading = true;
-				state.error = null;
-			});
+    getError: () => get().error,
 
-			try {
-				const template = get().currentTemplate;
+    getViewport: () => get().viewport,
 
-				if (!template) {
-					throw new Error("No template is currently loaded");
-				}
+    switchPage: (pageId: string) => {
+      set((state) => {
+        state.loading = true;
+        state.error = null;
+      });
 
-				const page = template.pages.find((p) => p.pageId === pageId);
+      try {
+        const template = get().currentTemplate;
 
-				if (!page) {
-					throw new Error(
-						`Page with ID ${pageId} not found in current template`,
-					);
-				}
+        if (!template) {
+          throw new Error("No template is currently loaded");
+        }
 
-				set((state) => {
-					state.currentPage = page;
-					state.currentPageId = pageId;
-					state.loading = false;
-					state.error = null;
-				});
-			} catch (error) {
-				set((state) => {
-					state.loading = false;
-					state.error =
-						error instanceof Error ? error.message : "Failed to switch page";
-				});
-			}
-		},
+        const page = template.pages.find((p) => p.pageId === pageId);
 
-		publishTemplate: (font?: string) => {
-			try {
-				const state = get();
-				const { currentTemplate, websitePagesState } = state;
+        if (!page) {
+          throw new Error(
+            `Page with ID ${pageId} not found in current template`
+          );
+        }
 
-				if (!currentTemplate) {
-					set((state) => {
-						state.error = "No template is currently loaded";
-					});
-					return null;
-				}
+        set((state) => {
+          state.currentPage = page;
+          state.currentPageId = pageId;
+          state.loading = false;
+          state.error = null;
+        });
+      } catch (error) {
+        set((state) => {
+          state.loading = false;
+          state.error =
+            error instanceof Error ? error.message : "Failed to switch page";
+        });
+      }
+    },
 
-				if (!currentTemplate.pages || currentTemplate.pages.length === 0) {
-					set((state) => {
-						state.error = "Template must have at least one page to publish";
-					});
-					return null;
-				}
+    publishTemplate: (font?: string) => {
+      try {
+        const state = get();
+        const { currentTemplate, websitePagesState } = state;
 
-				const templatePages = currentTemplate.pages.map((page) => {
-					const websitePageState = websitePagesState[page.pageId];
+        if (!currentTemplate) {
+          set((state) => {
+            state.error = "No template is currently loaded";
+          });
+          return null;
+        }
 
-					if (!websitePageState) {
-						throw new Error(`Page state not found for page: ${page.pageId}`);
-					}
+        if (!currentTemplate.pages || currentTemplate.pages.length === 0) {
+          set((state) => {
+            state.error = "Template must have at least one page to publish";
+          });
+          return null;
+        }
 
-					return {
-						pageId: page.pageId,
-						pageName: page.pagename,
-						path:page.path,
-						preview:"",
-						description:"",
-						websitePageState:JSON.stringify(websitePageState),
-					};
-				});
+        const templatePages = currentTemplate.pages.map((page) => {
+          const websitePageState = websitePagesState[page.pageId];
 
-				const publishData: PublishTemplateData = {
-					templatePages,
-					templateId: currentTemplate.templateId,
-					templateName: currentTemplate.name,
-					...(font && { font }),
-				};
+          if (!websitePageState) {
+            throw new Error(`Page state not found for page: ${page.pageId}`);
+          }
 
-				set((state) => {
-					state.error = null;
-				});
+          return {
+            pageId: page.pageId,
+            pageName: page.pagename,
+            path: page.path,
+            preview: "",
+            description: "",
+            websitePageState: JSON.stringify(websitePageState),
+          };
+        });
 
-				return publishData;
-			} catch (error) {
-				set((state) => {
-					state.error =
-						error instanceof Error
-							? error.message
-							: "Failed to publish template";
-				});
-				return null;
-			}
-		},
+        const publishData: PublishTemplateData = {
+          templatePages,
+          templateId: currentTemplate.templateId,
+          templateName: currentTemplate.name,
+          ...(font && { font }),
+        };
 
-		clearError: () => {
-			set((state) => {
-				state.error = null;
-			});
-		},
+        set((state) => {
+          state.error = null;
+        });
 
-		reset: () => {
-			set(initialState);
-		},
-	})),
+        return publishData;
+      } catch (error) {
+        set((state) => {
+          state.error =
+            error instanceof Error
+              ? error.message
+              : "Failed to publish template";
+        });
+        return null;
+      }
+    },
+
+    clearError: () => {
+      set((state) => {
+        state.error = null;
+      });
+    },
+
+    reset: () => {
+      set(initialState);
+    },
+  }))
 );
 
 export const useCurrentTemplate = () =>
-	useEditorStore((state) => state.currentTemplate);
+  useEditorStore((state) => state.currentTemplate);
 export const useCurrentPage = () =>
-	useEditorStore((state) => state.currentPage);
+  useEditorStore((state) => state.currentPage);
 export const useCurrentPageId = () =>
-	useEditorStore((state) => state.currentPageId);
+  useEditorStore((state) => state.currentPageId);
 export const useCurrentTemplateId = () =>
-	useEditorStore((state) => state.currentTemplateId);
+  useEditorStore((state) => state.currentTemplateId);
 export const useWebsitePagesState = () =>
-	useEditorStore((state) => state.websitePagesState);
+  useEditorStore((state) => state.websitePagesState);
 export const useCurrentPageState = () => {
-	const currentPageId = useEditorStore((state) => state.currentPageId);
-	const pagesState = useEditorStore((state) => state.websitePagesState);
-	return currentPageId ? pagesState[currentPageId] : undefined;
+  const currentPageId = useEditorStore((state) => state.currentPageId);
+  const pagesState = useEditorStore((state) => state.websitePagesState);
+  return currentPageId ? pagesState[currentPageId] : undefined;
 };
 export const useLoading = () => useEditorStore((state) => state.loading);
 export const useError = () => useEditorStore((state) => state.error);
