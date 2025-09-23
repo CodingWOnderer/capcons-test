@@ -9,7 +9,7 @@ import { InitialWebsiteDataState } from "../utils/initialstate";
 import { EmptyPageState, NoPageSelected } from "./empty-states";
 import CompositeEditor from "../layout/composite-editor";
 import "@measured/puck/puck.css";
-import { useSearch } from "@tanstack/react-router";
+import { useLoaderData, useRouteContext, useSearch } from "@tanstack/react-router";
 import React, { useCallback, useEffect } from "react";
 import { CapconsWebsiteTemplates } from "../templates";
 import { CapconsEditorOverrides } from "..";
@@ -42,7 +42,6 @@ export default function WebsiteTemplateEditor() {
 	const currentPage = useCurrentPage();
 	const currentPageState = useWebsitePagesState();
 	const setPageState = useEditorStore((state) => state.setPageState);
-
 	const CurrentData = currentPageId
 		? currentPageState[currentPageId]
 		: InitialWebsiteDataState;

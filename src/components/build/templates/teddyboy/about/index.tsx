@@ -15,6 +15,7 @@ export const TeddyBoyAboutPageTemplate: TemplatePage = {
 			},
 		},
 	},
+	path:"/aboutus",
 	pageState: {
 		root: {
 			props: {},

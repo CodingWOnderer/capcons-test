@@ -3,12 +3,17 @@ import type { EditorTemplate, TemplatePage } from "../types";
 import type { Data, Viewport } from "@measured/puck";
 import { immer } from "zustand/middleware/immer";
 import { EDITOR_VIEWPORTS } from "../utils/viewports";
+import { useUpdateCircleTemplate } from "@/hooks/api/templates/queries";
+ 
 
 interface PublishTemplateData {
 	templatePages: {
 		pageId: string;
 		pageName: string;
-		websitePageState: Data;
+		websitePageState: string;
+		path:string;
+        preview:string;
+        description:string;
 	}[];
 	templateId: string;
 	templateName: string;
@@ -264,7 +269,10 @@ export const useEditorStore = create<EditorStore>()(
 					return {
 						pageId: page.pageId,
 						pageName: page.pagename,
-						websitePageState,
+						path:page.path,
+						preview:"",
+						description:"",
+						websitePageState:JSON.stringify(websitePageState),
 					};
 				});
 
@@ -274,8 +282,6 @@ export const useEditorStore = create<EditorStore>()(
 					templateName: currentTemplate.name,
 					...(font && { font }),
 				};
-
-				console.log(publishData);
 
 				set((state) => {
 					state.error = null;

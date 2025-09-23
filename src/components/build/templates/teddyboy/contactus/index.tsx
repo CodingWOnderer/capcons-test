@@ -15,6 +15,7 @@ export const TeddyBoyContactusPageTemplate: TemplatePage = {
 			},
 		},
 	},
+	path:"/contactus",
 	pageState: {
 		root: {
 			props: {},

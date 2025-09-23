@@ -12,6 +12,7 @@ const WebsitePreviewRenderer = React.lazy(
 export default function WebsitePreviewDialog() {
   const open = usePreviewDialogOpen();
   const setPreviewDialogOpen = useEditorStore((s) => s.setPreviewDialogOpen);
+  const currentPage = useEditorStore((s)=>s.currentPage);
 
   return (
     <Dialog
@@ -33,7 +34,8 @@ export default function WebsitePreviewDialog() {
                 <MdLockOutline />
               </div>
               <span className="text-foreground/80 text-xs font-medium">
-                {`https://demo.capcons.com/`}
+       
+                {new URL(`https://demo.capcons.com${currentPage?.path ?? ""}`).toString()}
               </span>
             </div>
           </div>

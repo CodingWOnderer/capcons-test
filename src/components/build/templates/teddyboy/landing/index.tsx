@@ -8,6 +8,7 @@ import ProductListing from "./_components/product-listing";
 export const TeddyBoyLandingPageTemplate: TemplatePage = {
 	config: {
 		root: TeddyBoyTemplateRoot,
+		
 		components: {
 			HeroSection: {
 				fields: {
@@ -128,6 +129,7 @@ export const TeddyBoyLandingPageTemplate: TemplatePage = {
 			},
 		},
 	},
+	path:"/",
 	pageState: {
 		root: {
 			props: {},

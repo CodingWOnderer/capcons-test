@@ -19,7 +19,7 @@ export const TeddyBoyTemplate: EditorTemplate = {
         TeddyBoyContactusPageTemplate,
 		TeddyBoyTermsAndConditionPageTemplate
 	],
-	templateId: "78110131-a343-427e-9bca-9f28e58df729",
+	templateId: "68d13f3f42bbd37fc625b5ed",
 	name: "Teddy Boy",
 	font: "",
 };

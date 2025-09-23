@@ -5,6 +5,7 @@ export type TemplatePage = {
 	pageId: string;
 	pagename: string;
 	pageState:Data;
+	path:string;
 };
 
 export type EditorTemplate = {

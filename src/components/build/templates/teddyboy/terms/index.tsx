@@ -29,6 +29,7 @@ export const TeddyBoyTermsAndConditionPageTemplate: TemplatePage = {
 		],
 		zones: {},
 	},
+	path:"/terms",
 	pagename: "TermsAndCondition Page",
 	pageId: "5fea0d41-08fa-4ca9-9401-05dc8f40617f",
 };

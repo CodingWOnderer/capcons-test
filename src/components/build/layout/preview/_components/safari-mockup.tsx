@@ -7,15 +7,14 @@ import { useEditorStore } from "@/components/build/store/editor.store";
 export default function WebsitePreview({
 	children,
 	url,
-	path,
 	viewport,
 }: {
 	children: React.ReactNode;
 	url?: string;
-	path?: string;
 	viewport: Viewport;
 }) {
 	const setPreviewDialogOpen = useEditorStore((s) => s.setPreviewDialogOpen);
+	const currentPage = useEditorStore((s)=>s.currentPage);
 	return (
 		<div
 			className="mx-auto transition-all ease-linear"
@@ -35,7 +34,7 @@ export default function WebsitePreview({
 								<ViewPortSelector />
 							</div>
 							<span className="text-foreground/80 text-xs font-medium">
-								{`https://${url ?? ""}/${path ?? ""}`}
+								{new URL(`https://${url ?? ""}${currentPage?.path ?? ""}`).toString()}
 							</span>
 						</div>
 					</div>

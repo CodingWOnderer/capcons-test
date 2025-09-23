@@ -14,7 +14,7 @@ export default function EditorPreview() {
       order={2}
       className="bg-secondary h-[calc(100vh-50px)] p-4"
     >
-      <WebsitePreview viewport={viewport} url="demo.capcons.com" path="" >
+      <WebsitePreview viewport={viewport} url="demo.capcons.com"  >
         <Puck.Preview />
       </WebsitePreview>
     </ResizablePanel>
