@@ -1,5 +1,10 @@
-import { useEditorEngine } from '../../hooks/useEditorEngine';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/v1/tabs/tabs";
+import { useEditorEngine } from "../../hooks/useEditorEngine";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/v1/tabs/tabs";
 import { Drawer, Puck } from "@measured/puck";
 import {
   ResizablePanel,
@@ -7,26 +12,23 @@ import {
   ResizableHandle,
 } from "@/components/v1/resizeable/resizeable";
 import { ScrollArea } from "@/components/v1/scroll-area/srcollarea";
-import { cn } from '@/lib/utils';
-type Props = {}
+import { cn } from "@/lib/utils";
+import { useId } from "react";
 
-export default function LeftPanel({}: Props) {
-    const leftSidebarVisible = useEditorEngine(
-    (s) => s.appState
-  );
+export default function LeftPanel() {
+  const dispatch = useEditorEngine((s) => s.dispatch);
+  const id = useId()
   return (
-      <ResizablePanel
-      id="left"
+    <ResizablePanel
+      id={id}
       order={1}
-      className={cn(
-        "flex h-full w-fit z-10 group/panel min-w-[250px] "
-      )}
+      className={cn("flex h-full w-fit z-10 group/panel min-w-[250px] ")}
       maxSize={30}
       minSize={12}
+      onClick={()=>dispatch({ type: "setUi", ui: { itemSelector: null } })}
     >
       <div className="flex-1 w-full p-3 flex flex-col">
         <Drawer>
-         
           <Tabs
             defaultValue="page"
             className="text-sm h-[calc(100vh-70px)] w-full text-muted-foreground flex flex-col"
@@ -70,5 +72,5 @@ export default function LeftPanel({}: Props) {
         </Drawer>
       </div>
     </ResizablePanel>
-  )
+  );
 }

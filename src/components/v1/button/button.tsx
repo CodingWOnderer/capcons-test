@@ -3,7 +3,6 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { twMerge } from "tailwind-merge";
 import { RiLoader4Line } from "react-icons/ri";
 
-
 type Props = {
   children: ReactNode;
   isDisabled?: boolean;
@@ -37,9 +36,9 @@ const buttonVariants = cva(
         plain: "",
         selected: "",
         outline_bg: "",
-        // a constant color not in use on hover or click goes colorSchema color
         star: "text-bunker-200 bg-mineshaft-700 border-mineshaft-600",
-        link: "text-primary !p-0 bg-transparent outline-none border-none"
+        link: "text-primary !p-0 bg-transparent outline-none border-none",
+        ghost: "bg-transparent hover:bg-bunker-700/40 dark:hover:bg-white/10" // ✅ new ghost variant
       },
       isDisabled: {
         true: "bg-mineshaft-700 border border-mineshaft-600 text-white opacity-50 cursor-not-allowed",
@@ -57,7 +56,8 @@ const buttonVariants = cva(
         xs: ["text-xs", "py-1", "px-2"],
         sm: ["text-sm", "py-2", "px-4"],
         md: ["text-md", "py-2", "px-5"],
-        lg: ["text-lg", "py-2", "px-6"]
+        lg: ["text-lg", "py-2", "px-6"],
+        icon: ["h-9 w-9 p-0"] // ✅ new icon size variant (square button)
       }
     },
     compoundVariants: [
@@ -196,28 +196,31 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {leftIcon && (
           <div
             className={twMerge(
-              "inline-flex shrink-0 cursor-pointer items-center justify-center transition-all",
+              "inline-flex shrink-0 items-center justify-center transition-all",
               loadingToggleClass,
-              size === "xs" ? "mr-1" : "mr-2"
+              size === "xs" ? "mr-1" : size === "icon" ? "" : "mr-2"
             )}
           >
             {leftIcon}
           </div>
         )}
-        <span
-          className={twMerge(
-            "transition-all",
-            isFullWidth ? "w-full" : "w-min",
-            loadingToggleClass
-          )}
-        >
-          {children}
-        </span>
+        {size !== "icon" && (
+          <span
+            className={twMerge(
+              "transition-all",
+              isFullWidth ? "w-full" : "w-min",
+              loadingToggleClass
+            )}
+          >
+            {children}
+          </span>
+        )}
         {rightIcon && (
           <div
             className={twMerge(
-              "inline-flex shrink-0 cursor-pointer items-center justify-center transition-all",
-              loadingToggleClass
+              "inline-flex shrink-0 items-center justify-center transition-all",
+              loadingToggleClass,
+              size === "xs" ? "ml-1" : size === "icon" ? "" : "ml-2"
             )}
           >
             {rightIcon}

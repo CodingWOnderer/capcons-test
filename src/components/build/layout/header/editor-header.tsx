@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
 import { PiSidebarSimple, PiSidebarSimpleFill } from "react-icons/pi";
 import { useEditorEngine } from "../../hooks/useEditorEngine";
 import PageSelector from "../_components/pageSelector";
@@ -33,7 +35,7 @@ export default function EditorHeader() {
   };
 
   return (
-    <div className="border-b border-border px-4 flex justify-between py-2 items-center bg-background">
+    <div onClick={() => dispatch({ type: "setUi", ui: { itemSelector: null } })} className="border-b border-border px-4 flex justify-between py-2 items-center bg-background">
       <div className="flex items-center gap-2">
         <button
           type="button"
